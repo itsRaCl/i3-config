@@ -9,6 +9,8 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
+include colors
+
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -114,6 +116,18 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
+
+workspace 1 output eDP-1
+workspace 2 output eDP-1
+workspace 3 output eDP-1
+workspace 4 output eDP-1
+workspace 5 output DP-1
+workspace 6 output DP-1
+workspace 7 output DP-1
+workspace 8 output DP-1
+workspace 9 output DP-1
+workspace 10 output DP-1
+
 set $ws1 "1"
 set $ws2 "2"
 set $ws3 "3"
@@ -185,5 +199,9 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
+smart_borders on
+for_window [class="^.*"] border pixel 2
+gaps inner 5px
+gaps outer 5px
 
-default_border none
+focus_follows_mouse no
