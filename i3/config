@@ -10,6 +10,7 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 include colors
+include workspace_config
 
 set $mod Mod4
 
@@ -24,20 +25,26 @@ font pango:monospace 8
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
-exec_always --no-startup-id feh --no-fehbh --bg-max $HOME/personal/wallpaper/reset_restart_refocus.jpg --image-bg "#1e1e2e"
+exec_always --no-startup-id feh --no-fehbh --bg-fill $HOME/personal/wallpaper/adventure-motorbiking-with-a-purple-violet-hue.jpg
+exec --no-startup-id picom
+exec --no-startup-id $HOME/.config/scripts/setup_screens.sh
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- ~/.config/scripts/lock.sh
-exec --no-startup-id i3-battery-popup -L 20% -I 2% -n -s ~/.config/i3/windows_xp_battery.mp3 -v 50
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id xss-lock  --transfer-sleep-lock -- ~/.config/scripts/lock.sh
+exec_always --no-startup-id $HOME/.config/scripts/battery_notif.sh
+exec_always --no-startup-id $HOME/.config/scripts/launch_bars.sh
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet 
+exec --no-startup-id udiskie -An --appindicator
+exec --no-startup-id blueman-applet
 exec --no-startup-id flameshot 
 exec --no-startup-id optimus-manager-qt 
+exec --no-startup-id kdeconnect-indicator 
+exec --no-startup-id clipcatd
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -48,6 +55,8 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 bindsym XF86AudioPlayPause exec --no-startup-id playerctl play-pause
 bindsym XF86AudioPause exec --no-startup-id playerctl pause
 bindsym XF86AudioPlay exec --no-startup-id playerctl play 
+bindsym XF86AudioNext exec --no-startup-id playerctl next 
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous 
 bindsym Print exec --no-startup-id flameshot gui
 
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set 5%+ 
@@ -63,8 +72,10 @@ tiling_drag modifier titlebar
 
 # start a terminal
 bindsym $mod+Return exec alacritty -e tmux
-bindsym $mod+Shift+f exec firefox 
-bindsym $mod+Shift+s exec spotify
+bindsym $mod+Shift+Return exec alacritty
+bindsym $mod+Shift+b exec chromium 
+bindsym $mod+Shift+m exec chromium --profile-directory=Default --app-id=cinhimbnkkaeohfgghhklpknlkffjgod
+bindsym $mod+v exec clipcat-menu
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -72,7 +83,8 @@ bindsym $mod+Shift+q kill
 # start dmenu (a program launcher)
 #bindsym $mod+d exec --no-startup-id dmenu_run
 # A more modern dmenu replacement is rofi:
-bindsym $mod+d exec "rofi -modi drun,run -show drun"
+bindsym $mod+d exec "rofi -1 -modi drun,run -show drun"
+bindsym $mod+Shift+d exec "rofi -1 -modi drun,run -show run"
 # There also is i3-dmenu-desktop which only displays applications shipping a
 # .desktop file. It is a wrapper around dmenu, so you need that installed.
 # bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
@@ -129,17 +141,16 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-
-workspace 1 output eDP-1-1
-workspace 2 output eDP-1-1
-workspace 3 output eDP-1-1
-workspace 4 output eDP-1-1
-workspace 5 output HDMI-1-1
-workspace 6 output HDMI-1-1
-workspace 7 output HDMI-1-1
-workspace 8 output HDMI-1-1
-workspace 9 output HDMI-1-1
-workspace 10 output HDMI-1-1
+workspace 1 output eDP-1-1 eDP-1
+workspace 2 output eDP-1-1 eDP-1
+workspace 3 output eDP-1-1 eDP-1
+workspace 4 output eDP-1-1 eDP-1
+workspace 5 output HDMI-1-1 eDP-1-1 HDMI-1
+workspace 6 output HDMI-1-1 eDP-1-1 HDMI-1
+workspace 7 output HDMI-1-1 eDP-1-1 HDMI-1
+workspace 8 output HDMI-1-1 eDP-1-1 HDMI-1
+workspace 9 output HDMI-1-1 eDP-1-1 HDMI-1
+workspace 10 output HDMI-1-1 eDP-1-1 HDMI-1
 
 set $ws1 "1"
 set $ws2 "2"
@@ -211,9 +222,10 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 
-smart_gaps on
+smart_gaps off
 for_window [class="^.*"] border pixel 2
-gaps inner 5px
-gaps outer 5px
+for_window [class="Yad" title="yad-calendar"] floating enable 
+gaps inner 6px
+gaps outer 6px
 
 focus_follows_mouse no
