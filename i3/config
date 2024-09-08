@@ -27,6 +27,7 @@ font pango:monospace 8
 exec --no-startup-id dex --autostart --environment i3
 exec_always --no-startup-id feh --no-fehbh --bg-fill $HOME/personal/wallpaper/adventure-motorbiking-with-a-purple-violet-hue.jpg
 exec --no-startup-id picom
+exec --no-startup-id /usr/lib/polkit-kde-authentication-agent-1
 exec --no-startup-id $HOME/.config/scripts/setup_screens.sh
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
@@ -34,7 +35,7 @@ exec --no-startup-id $HOME/.config/scripts/setup_screens.sh
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec_always --no-startup-id xss-lock  --transfer-sleep-lock -- ~/.config/scripts/lock.sh
-exec_always --no-startup-id $HOME/.config/scripts/battery_notif.sh
+exec --no-startup-id $HOME/.config/scripts/battery_notif.sh
 exec_always --no-startup-id $HOME/.config/scripts/launch_bars.sh
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -71,8 +72,8 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec alacritty -e tmux
-bindsym $mod+Shift+Return exec alacritty
+bindsym $mod+Return exec kitty -e tmux
+bindsym $mod+Shift+Return exec kitty 
 bindsym $mod+Shift+b exec chromium 
 bindsym $mod+Shift+m exec chromium --profile-directory=Default --app-id=cinhimbnkkaeohfgghhklpknlkffjgod
 bindsym $mod+v exec clipcat-menu
